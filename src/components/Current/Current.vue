@@ -3,7 +3,7 @@
         <div class="current__info">
             <p class="current__deg">{{ Math.round(getFullWeather.current.temp) }}°</p>
             <p class="current__day">Сегодня</p>
-            <p class="current__time">Время: 21:54</p>
+            <p class="current__time">Время: {{ getHour }}:{{ getMinutes }}</p>
             <p class="current__city">Город: {{ getFullWeather.name }}</p>
             <img src="@/assets/img/sun.svg" v-if="icon == 1" alt="" class="current__img">
             <img src="@/assets/img/cloudy.svg" v-else-if="icon == 2" alt="" class="current__img">
@@ -50,6 +50,7 @@
 
 <script>
 import { mapGetters } from "vuex";
+import unix from '../../timestamp';
     export default {
         computed: {
             ...mapGetters(['getFullWeather']),
@@ -73,6 +74,12 @@ import { mapGetters } from "vuex";
                 }
                 console.log(deg);
                 return deg
+            },
+            getHour(){
+                return unix( this.getFullWeather.current.dt, 'hour')
+            },
+            getMinutes(){
+                return unix( this.getFullWeather.current.dt, 'min')
             }
         }
     }

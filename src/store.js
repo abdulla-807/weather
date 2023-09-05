@@ -5,14 +5,19 @@ import axios from "axios";
 const store = createStore({
   state: {  
     apiKey: '7d6a4baf5de7814f7af5d578ef57bad2',
-    fullWeather: null
+    fullWeather: null,
+    city: 'Tashkent'
   },
   mutations: { 
     setWeather(state, weather){
       state.fullWeather = weather
-    }
+    },
+    setCity(state, payload){
+      state.city = payload
+    },
+    
   },
-  actions: {   
+  actions: {
     async setWeather({commit, state}, city){
       try {
         let response = await axios.get(`http://api.openweathermap.org/geo/1.0/direct?q=${city}&appid=${state.apiKey}`);
@@ -22,6 +27,7 @@ const store = createStore({
         let weather = result.data;
         let weatherObj = { ...weather, name: local_names.ru }
         commit('setWeather', weatherObj)
+        commit('setCity', city)
         console.log(weatherObj);
       } catch (error) {
         
@@ -29,7 +35,8 @@ const store = createStore({
     }
   },
   getters: {  
-    getFullWeather: (state)=> state.fullWeather
+    getFullWeather: (state)=> state.fullWeather,
+    getDailyWeather: (state)=> state.fullWeather.daily
   }
 })
 
